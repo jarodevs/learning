@@ -1,0 +1,12 @@
+- Create logic for Node
+- Create logic for LinkedList that will contain elements of type Node
+	- init ✅
+	- print ✅
+	- get_length ✅
+	- insert_at_beginning ✅
+	- insert_at_end ✅
+	- remove_at_beginning ✅
+	- remove_at_end ✅
+	- insert_at ✅
+	- remove_at ✅
+
