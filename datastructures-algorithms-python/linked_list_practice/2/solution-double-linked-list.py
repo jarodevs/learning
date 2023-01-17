@@ -1,7 +1,8 @@
 class Node:
-    def __init__(self, data, next=None) -> None:
+    def __init__(self, data, prev=None, next=None) -> None:
         self.data = data
         self.next: Node | None = next
+        self.prev: Node | None = prev
 
 
 class LinkedList:
@@ -23,6 +24,8 @@ class LinkedList:
             current = self.head
             str = ""
             while current:
+                if current.prev:
+                    str += "<"
                 str += current.data + "-->"
                 current = current.next
 
@@ -43,6 +46,8 @@ class LinkedList:
         if self.head:
             node.next = self.head
         self.head = node
+        if self.head.next:
+            self.head.next.prev = node
 
     def insert_at_end(self, data) -> None:
         node = Node(data)
@@ -50,6 +55,9 @@ class LinkedList:
             current = self.head
             while current.next:
                 current = current.next
+            node.prev = current
+            if current.next:
+                current.next.prev = node
             current.next = node
         else:
             self.head = node
@@ -63,8 +71,10 @@ class LinkedList:
 
         while current:
             if currentIndex + 1 == index:
-                node = Node(data, current.next)
+                node = Node(data, current, current.next)
                 current.next = node
+                if current.next.next:
+                    current.next.next.prev = node
                 break
             currentIndex += 1
             current = current.next
@@ -74,8 +84,10 @@ class LinkedList:
             current = self.head
             while current:
                 if current.data == after_value:
-                    node = Node(value, current.next)
+                    node = Node(value, current, current.next)
                     current.next = node
+                    if current.next.next:
+                        current.next.next.prev = node
                     break
                 current = current.next
         else:
@@ -83,7 +95,10 @@ class LinkedList:
 
     def remove_at_beginning(self) -> None:
         if self.head:
-            self.head = self.head.next
+            if self.head.next:
+                self.head = self.head.next
+            if self.head.next:
+                self.head.next.prev = self.head
         else:
             raise Exception('Empty linked list')
 
@@ -104,16 +119,21 @@ class LinkedList:
         currentIndex = 0
 
         while current:
-            if currentIndex == 0:
-                self.head = current.next
-                break
-            else:
-                if currentIndex + 1 == index:
+            if currentIndex == index:
+                if current.prev:
+                    current.prev.next = current.next
                     if current.next:
-                        current.next = current.next.next
+                        current.next.prev = current.prev
                         break
-                currentIndex += 1
-                current = current.next
+                else:
+                    if current.next:
+                        current.next.prev = None
+                        self.head = current.next
+                        break
+                    else:
+                        self.head = None
+            current = current.next
+            currentIndex += 1
 
     def remove_by_value(self, value) -> None:
         if self.head:
@@ -126,3 +146,11 @@ class LinkedList:
                 counter += 1
         else:
             raise Exception('Empty List')
+
+
+el1 = 'Banana'
+el2 = 'Orange'
+el3 = 'Apple'
+el4 = 'Dragonfruit'
+ll = LinkedList([el1, el2, el3])
+ll.print()
