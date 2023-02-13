@@ -5,7 +5,9 @@ def bubble_sort(array):
         for i in range(1, n):
             if array[i-1] > array[i]:
                 array[i-1], array[i] = array[i], array[i-1]
+                print(i)
                 newn = i
+        print(n)
         n = newn
     return array
 
